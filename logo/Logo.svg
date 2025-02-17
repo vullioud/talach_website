@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   width="210mm"
+   height="297mm"
+   viewBox="0 0 210 297"
+   version="1.1"
+   id="svg1"
+   inkscape:export-filename="logo/logo_blue_filled.png"
+   inkscape:export-xdpi="96"
+   inkscape:export-ydpi="96"
+   inkscape:version="1.4 (1:1.4+202410161351+e7c3feb100)"
+   sodipodi:docname="Logo.svg"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <sodipodi:namedview
+     id="namedview1"
+     pagecolor="#ffffff"
+     bordercolor="#000000"
+     borderopacity="0.25"
+     inkscape:showpageshadow="2"
+     inkscape:pageopacity="0.0"
+     inkscape:pagecheckerboard="0"
+     inkscape:deskcolor="#d1d1d1"
+     inkscape:document-units="mm"
+     inkscape:zoom="1.3555147"
+     inkscape:cx="-621.16626"
+     inkscape:cy="787.52374"
+     inkscape:window-width="1850"
+     inkscape:window-height="1016"
+     inkscape:window-x="0"
+     inkscape:window-y="0"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="layer1"
+     showgrid="false" />
+  <defs
+     id="defs1">
+    <rect
+       x="249.14124"
+       y="312.81066"
+       width="189.62416"
+       height="195.16064"
+       id="rect2" />
+    <rect
+       x="89.967669"
+       y="217.30652"
+       width="484.44129"
+       height="460.91129"
+       id="rect1" />
+  </defs>
+  <g
+     inkscape:label="Layer 1"
+     inkscape:groupmode="layer"
+     id="layer1">
+    <rect
+       style="fill:none;stroke:none;stroke-width:0.521527;stroke-dasharray:none"
+       id="rect4"
+       width="41.875942"
+       height="41.391533"
+       x="-164.59085"
+       y="194.0901" />
+    <text
+       xml:space="preserve"
+       transform="scale(0.26458333)"
+       id="text1"
+       style="fill:#ff0000;font-size:13.33333333px;-inkscape-font-specification:PIXAÇAO;font-family:PIXAÇAO;stroke-width:0;stroke:#000000;line-height:17.84374952px;text-orientation:auto;text-align:start;writing-mode:lr-tb;direction:ltr;white-space:pre;shape-inside:url(#rect1);font-weight:normal;font-style:normal;font-stretch:normal;font-variant:normal" />
+    <path
+       d="m -158.15431,231.15818 v -31.80979 h -0.93557 v 6.54907 h -0.93561 v -7.48464 h 4.67793 v 7.48464 h -0.93557 v -6.54907 h -0.93561 v 31.80979 z m 4.67789,-5.6135 2.80675,-2.80675 v -23.38954 h -2.80675 z m -0.93557,5.6135 v -32.74536 h 4.67793 v 32.74536 h -0.93561 v -7.01688 l -2.80675,2.80675 v 4.21013 z m 5.6135,0 v -32.74536 h 0.93557 v 31.80975 h 2.80675 v -4.67789 h 0.93557 v 5.6135 z m 6.54907,-5.6135 2.80676,-2.80675 v -23.38954 h -2.80676 z m -0.93556,5.6135 v -32.74536 h 4.67789 v 32.74536 h -0.93557 v -7.01688 l -2.80676,2.80675 v 4.21013 z m 5.61345,0 v -32.74536 h 4.67794 v 7.48464 h -0.93562 v -6.54907 h -2.8067 v 30.87418 h 2.8067 v -4.67789 h 0.93562 v 5.6135 z m 5.61351,0 v -32.74536 h 0.93557 v 27.13186 h 2.80675 v -27.13186 h 0.93557 v 12.16253 h -0.46776 q 0.17559,0 0.29235,0.17559 0.17559,0.11676 0.17559,0.29235 v 20.11503 h -0.93557 v -4.67794 h -2.80675 v 4.67794 z"
+       id="text2"
+       style="font-size:13.3333px;line-height:17.8438px;font-family:PIXAÇAO;-inkscape-font-specification:PIXAÇAO;white-space:pre;fill:#ffffff;stroke:#000000;stroke-width:0"
+       aria-label="TALACH" />
+    <path
+       d="m -162.74468,195.90306 v 37.76562 h 38.18359 v -37.76562 z m 1.02539,1.02539 h 36.13281 v 35.71484 h -36.13281 z"
+       id="rect3"
+       style="fill:#ffffff" />
+  </g>
+</svg>

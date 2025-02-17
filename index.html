@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Professional screen printing services offering custom t-shirts, hoodies, and more. Quality craftsmanship and expert solutions for all your printing needs.">
+    <meta name="keywords" content="screen printing, custom t-shirts, hoodies, professional printing">
+    <title>Minimalistic Design</title>
+    
+    <!-- Preload fonts -->
+    <link rel="preload" href="fonts/KOT.otf" as="font" type="font/otf" crossorigin>
+    <link rel="preload" href="fonts/Eunomia-Light.otf" as="font" type="font/otf" crossorigin>
+    <link rel="preload" href="fonts/Impact.ttf" as="font" type="font/ttf" crossorigin>
+    
+    <!-- Stylesheets -->
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <!-- Background Canvas -->
+    <canvas id="background"></canvas>
+    
+    <!-- First Window Logo -->
+    <div id="first-window-logo" class="first-window-logo">
+        <img src="" alt="Logo" class="dynamic-logo">
+    </div>
+    
+    <!-- Contact Popup -->
+    <div class="popup-overlay"></div>
+    <div class="contact-popup">
+        <button class="popup-close">&times;</button>
+        <p>if you made it so far, maybe you want to get in touch:</p>
+        <span class="email">talach@posteo.net</span>
+    </div>
+
+    <!-- Navigation -->
+    <header>
+        <button class="menu-button" aria-label="Toggle Menu">
+            <span></span>
+            <span></span>
+            <span></span>
+        </button>
+        <nav>
+            <ul>
+                <li><a href="#products1">Cellular Auto</a></li>
+                <li><a href="#products2">Drawing</a></li>
+                <li><a href="#quote">Quote</a></li>
+                <li><a href="#manifesto">Talach ?</a></li>
+                <li><a href="#contact">Contact</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <!-- Main Content -->
+    <div class="content">
+        <main>
+            <!-- Products1 Section -->
+            <section id="products1" class="products-section">
+                <div class="product-info-panel">
+                    <div class="section-title"></div>
+                    <div class="section-text"></div>
+                </div>
+                <div class="product-grid">
+                    <!-- Products will be populated by JS -->
+                </div>
+            </section>
+
+            <!-- Products2 Section -->
+            <section id="products2" class="products-section">
+                <div class="product-info-panel">
+                    <div class="section-title">
+                        <!-- Content managed by content.js -->
+                    </div>
+                </div>
+                <div class="product-grid">
+                    <!-- Products will be populated by JS -->
+                </div>
+                <div class="store-cta">
+                    <a href="https://www.etsy.com/shop/talach" class="store-link">What is now printed ?</a>
+                </div>
+            </section>
+
+            <!-- Quote Section -->
+            <section id="quote" class="quote-section">
+                <div class="section-content">
+                    <div class="quote-text"></div>
+                </div>
+            </section>
+
+            <!-- Manifesto Section -->
+            <section id="manifesto" class="manifesto-section">
+                <div class="section-content">
+                    <div class="section-title"></div>
+                    <div class="section-text"></div>
+                </div>
+            </section>
+
+            <!-- Contact Section -->
+            <section id="contact" class="contact-section">
+                <div class="section-content">
+                    <div class="section-title">
+                        <!-- Content managed by content.js -->
+                    </div>
+                    <div class="contact-links">
+                        <!-- Content managed by content.js -->
+                    </div>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <!-- Scripts -->
+    <script src="automata.js"></script>
+    <script src="content.js"></script>
+</body>
+</html> 
