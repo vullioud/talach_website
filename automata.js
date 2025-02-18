@@ -24,6 +24,35 @@ class CellularAutomata {
                 circleFill: '#660000',
                 isDark: true
             },
+            // New dark palettes
+            {
+                background: '#1A0B1C', // Deep purple
+                dots: '#2D1B2F',
+                stroke: '#00FF99', // Bright mint
+                circleFill: '#008055',
+                isDark: true
+            },
+            {
+                background: '#0B1C1A', // Deep teal
+                dots: '#1B2F2D',
+                stroke: '#FF3366', // Bright coral
+                circleFill: '#CC1A40',
+                isDark: true
+            },
+            {
+                background: '#1C0B0B', // Deep burgundy
+                dots: '#2F1B1B',
+                stroke: '#33FF99', // Bright seafoam
+                circleFill: '#1ACC66',
+                isDark: true
+            },
+            {
+                background: '#0B0B1C', // Deep navy
+                dots: '#1B1B2F',
+                stroke: '#FFCC00', // Golden yellow
+                circleFill: '#CC9900',
+                isDark: true
+            },
             // Light palettes with good contrast
             {
                 background: '#ffffff',
@@ -37,6 +66,35 @@ class CellularAutomata {
                 dots: '#E5E5E5',
                 stroke: '#FF0066', // Bright pink
                 circleFill: '#990033',
+                isDark: false
+            },
+            // New light palettes
+            {
+                background: '#F5F0FF', // Soft lavender
+                dots: '#E5E0EE',
+                stroke: '#FF6600', // Bright orange
+                circleFill: '#CC5200',
+                isDark: false
+            },
+            {
+                background: '#FFF0F5', // Soft pink
+                dots: '#EEE0E5',
+                stroke: '#0066FF', // Electric blue
+                circleFill: '#0052CC',
+                isDark: false
+            },
+            {
+                background: '#F0FFF5', // Soft mint
+                dots: '#E0EEE5',
+                stroke: '#FF0099', // Hot pink
+                circleFill: '#CC007A',
+                isDark: false
+            },
+            {
+                background: '#FFF9F0', // Soft peach
+                dots: '#EEE9E0',
+                stroke: '#6600FF', // Bright purple
+                circleFill: '#5200CC',
                 isDark: false
             }
         ];
@@ -59,7 +117,9 @@ class CellularAutomata {
         this.canvas.height = window.innerHeight;
         
         // Text animation properties
-        this.text = ["HI YOU!"];
+        this.text = [["HEJ", "YO", "SUPER", "HI YOU", "WOOO", "SALUT", "TIP TOP"][Math.floor(Math.random() * 7)]];
+
+        // Since we're not using two lines anymore, we can simplify the text size
         this.textSize = Math.min(this.canvas.width * 0.75, this.canvas.height) * 0.4;
         this.letterMask = [];
         
