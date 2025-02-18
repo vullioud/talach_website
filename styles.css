@@ -14,7 +14,7 @@
     --section-background: rgba(0, 12, 25, 0.75);
 
     /* Typography */
-    --title-font: 'PurePin-Regular', sans-serif;
+    --title-font: 'Courier Prime', monospace;
     --body-font: 'Courier Prime', monospace;
     --quote-font: 'Courier Prime', monospace;
     --contact-font: 'Courier Prime', monospace;
@@ -32,8 +32,8 @@
     --section-spacing: 2rem;
     --text-spacing: 1.7;
     --section-padding: 4rem;
-    --content-max-width: 1200px;
-    --text-frame-width: 800px;
+    --content-max-width: 1600px;
+    --text-frame-width: 1600px;
     --manifesto-padding: 1.5rem;
 }
 
@@ -241,10 +241,9 @@ nav ul a:hover {
 
 .section-text {
     width: 100%;
-    max-width: 800px;
-    margin: 0;
+    max-width: var(--content-max-width);
+    margin: 0 auto;
     padding: 0 1rem;
-    text-align: left;
 }
 
 .section-text p {
@@ -1589,150 +1588,52 @@ nav ul a:hover {
     display: block;
 }
 
-/* About section text */
-.about-section .section-text p {
+/* Update text width variables */
+:root {
+    /* ... other variables ... */
+    --content-max-width: 1600px;  /* Increased from 1200px */
+    --text-frame-width: 1600px;   /* Increased from 800px */
+}
+
+/* Update section text widths */
+.section-text {
+    width: 100%;
+    max-width: var(--content-max-width);
+    margin: 0 auto;
+    padding: 0 1rem;
+}
+
+/* Clean up duplicate text styles and consolidate */
+.section-text p,
+.manifesto-section p,
+.product-description p {
     font-family: var(--body-font);
-    font-size: 1.4rem;
-    line-height: 1.7;
-    color: rgba(255, 255, 255, 0.6);
+    font-size: var(--body-size);
+    line-height: var(--text-spacing);
+    color: var(--text-color);
     text-align: justify;
-    margin-bottom: 2rem;
+    margin-bottom: 1rem;
     white-space: pre-line;
 }
 
-/* Style for section titles within text */
-.about-section .section-text p::first-line {
+/* Update manifesto section styles */
+.manifesto-section .section-text {
+    width: 100%;
+    max-width: var(--content-max-width);
+    margin: 0 auto;
+    padding: 0 1rem;
+}
+
+/* Remove duplicate Impact font declarations */
+.products-section .section-title h3,
+.contact-section h3 {
     font-family: var(--title-font);
-    font-size: min(5vw, 3rem);
-    line-height: 2;
-    color: rgba(255, 255, 255, 0.7);
-    font-weight: normal;
 }
 
-/* Remove any other font declarations */
-.about-content p,
-.manifesto-content p,
-.section-content p {
-    font-family: var(--body-font);
-}
-
-/* Find where text sections are styled */
-.section-text p {
-    font-family: var(--body-font);
-    font-size: 1.4rem;
-    line-height: 1.7;
-    color: rgba(255, 255, 255, 0.6);
-    text-align: left;
-}
-
-.section-title h3 {
-    font-family: var(--title-font);
-    font-weight: normal;
-    font-size: var(--title-size);
-    line-height: 1.1;
-    color: var(--text-color-bright);
-    text-align: left;
-    margin: 1rem 0;
-    opacity: 0.8;
-    display: block !important;
-}
-
-/* Remove any other font declarations */
-.about-content p,
-.manifesto-content p,
-.product-description p,
-.section-content p {
-    font-family: var(--body-font);
-}
-
-/* Base text styles */
-body, p, .section-text p, 
-.product-description p, 
-.section-content p,
-.about-content p,
-.manifesto-content p {
-    font-family: var(--body-font);
-    font-size: var(--body-size);
-    line-height: var(--text-spacing);
-    color: var(--text-color);
-    text-align: justify;
-}
-
-/* Title styles */
-.section-title h3,
-.product-info-panel h2,
-.manifesto-section h3 {
-    font-family: var(--title-font);
-    font-weight: normal;
-    font-size: var(--title-size);
-    line-height: 1.1;
-    color: var(--text-color-bright);
-    text-align: left;
-    margin: 1rem 0;
-    opacity: 0.8;
-}
-
-/* Quote styles */
-.quote-text,
-.section-text .quote-text {
-    font-family: var(--quote-font);
-    font-style: italic;
-    font-size: var(--quote-size);
+/* Clean up quote section width */
+.quote-section .section-content {
+    max-width: var(--content-max-width);
     text-align: center;
-    margin: calc(var(--section-spacing) / 2) 0;
-    line-height: 1.4;
-    color: var(--text-color-bright);
-}
-
-.quote-author,
-.section-text .quote-author {
-    font-family: var(--quote-font);
-    font-style: italic;
-    font-size: var(--quote-author-size);
-    text-align: center;
-    margin-top: calc(var(--section-spacing) / 2);
-    color: var(--text-color);
-}
-
-/* Contact and navigation styles */
-.contact-section .section-title h3,
-.contact-links a,
-.store-link,
-nav ul a,
-.contact-popup p,
-.contact-popup .email {
-    font-family: var(--contact-font);
-    font-size: var(--contact-size);
-    color: var(--text-color);
-    letter-spacing: 0.05em;
-    text-decoration: none;
-    transition: all 0.3s ease;
-}
-
-/* Menu styles */
-nav ul a {
-    font-family: var(--contact-font);
-    font-size: var(--contact-size);
-    padding: 0.5rem 1rem;
-}
-
-/* Product card styles */
-.product-card h3 {
-    font-family: var(--title-font);
-    font-weight: normal;
-    font-size: 1.2rem;
-    margin: 1rem 0;
-    color: var(--text-color-bright);
-    opacity: 0.8;
-    line-height: 1.1;
-}
-
-.product-card p {
-    font-family: var(--body-font);
-    font-size: var(--body-size);
-    line-height: var(--text-spacing);
-    color: var(--text-color);
-    text-align: justify;
 }
 
 /* Quote Section */
@@ -1748,7 +1649,7 @@ nav ul a {
 }
 
 .quote-section .section-content {
-    max-width: var(--text-frame-width);
+    max-width: 800px;  /* Keep quotes more narrow for better readability */
     text-align: center;
 }
 
@@ -1767,126 +1668,51 @@ nav ul a {
     color: var(--text-color-dim);
 }
 
-/* Manifesto Section */
+/* Manifesto Section adjustments */
 .manifesto-section {
-    display: flex;
-    justify-content: center;
-    padding: 2rem;
-    min-height: fit-content;
+    display: block;
+    width: 100%;
+    padding: var(--section-padding);
     background: var(--section-background);
     backdrop-filter: blur(5px);
     -webkit-backdrop-filter: blur(5px);
-    width: 100%;
 }
 
 .manifesto-section .section-content {
     max-width: var(--content-max-width);
     width: 100%;
     margin: 0 auto;
-    padding: 0 2rem;
+    padding: 0;
+}
+
+.manifesto-section .section-title {
+    width: 100%;
+    max-width: var(--content-max-width);
+    margin: 0 auto 2rem auto;
+    padding: 0 1rem;
 }
 
 .manifesto-section .section-text {
     width: 100%;
-    max-width: none;
-    text-align: justify;
+    max-width: var(--content-max-width);
+    margin: 0 auto;
+    padding: 0 1rem;
 }
 
-.manifesto-section h3 {
-    font-family: var(--body-font);
-    font-size: var(--title-size);
-    color: var(--text-color-bright);
-    margin-bottom: 1.5rem;
-    text-align: left;
+/* Adjust product section title for consistency */
+.products-section .section-title {
     width: 100%;
+    max-width: var(--content-max-width);
+    margin: 0 auto 2rem auto;
+    padding: 0 1rem;
 }
 
-.manifesto-section p {
-    font-family: var(--body-font);
-    font-size: var(--manifesto-size);
-    line-height: 1.4;
-    color: var(--text-color);
-    text-align: justify !important;
-    margin-bottom: calc(var(--section-spacing) / 2);
-    max-width: none;
-    width: 100%;
-    hyphens: auto;
-    -webkit-hyphens: auto;
-    -ms-hyphens: auto;
+/* Add spacing for manifesto bullet points */
+.manifesto-section .section-text p {
+    margin-bottom: 2rem;  /* Increase from 1rem to 2rem */
 }
 
-/* Products Section */
-.products-section {
-    padding: var(--section-padding);
-}
-
-.products-section .section-title h3 {
-    font-family: 'Impact', sans-serif;
-    font-size: var(--title-size);
-    color: var(--text-color-bright);
-    text-align: center;
-    margin-bottom: 2rem;
-}
-
-/* Contact Section */
-.contact-section {
-    padding: calc(var(--section-padding) / 2);
-    text-align: center;
-}
-
-.contact-section h3 {
-    font-family: 'Impact', sans-serif;
-    font-size: var(--contact-size);
-    color: var(--text-color-bright);
-    margin-bottom: 1rem;
-}
-
-.contact-links a {
-    font-family: var(--body-font);
-    font-size: var(--contact-size);
-    color: var(--text-color-dim);
-    text-decoration: none;
-    transition: color 0.3s ease;
-}
-
-.contact-links a:hover {
-    color: var(--text-color-bright);
-}
-
-/* Store Link */
-.store-link {
-    display: inline-block;
-    padding: 0.5em 1em;
-    border: 1px solid rgba(255, 255, 255, 0.2);
-    border-radius: 4px;
-    text-align: center;
-}
-
-.store-link:hover {
-    border-color: var(--stroke-color);
-    opacity: 0.8;
-}
-
-/* Section content adjustments */
-.section-content {
-    padding: calc(var(--section-padding) / 2);
-}
-
-/* Remove fixed heights */
-.about-section, 
-.products-section, 
-.contact-section,
-.quote-section,
-.manifesto-section {
-    height: auto;
-    min-height: fit-content;
-}
-
-/* Adjust vertical spacing */
-.section-title h3 {
-    margin: 1rem 0;
-}
-
-.section-text p {
-    margin-bottom: 1rem;
+/* Adjust the last paragraph to not have extra bottom margin */
+.manifesto-section .section-text p:last-child {
+    margin-bottom: 0;
 } 

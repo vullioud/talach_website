@@ -101,12 +101,12 @@ const sectionContent = {
         }
     },
     manifesto: {
-        title: 'TALACH ?',
-        text: `<p><em>Travail à la Chaine</em>— A set of rules, this time not to limit, but to expand. Not a boundary, but a starting point.</p>
+        title: '<h3 style="font-family: var(--body-font)">TALACH ?</h3>',
+        text: `<p>• <em>Travail à la Chaine</em>— A set of rules, this time not to limit, but to expand. Not a boundary, but a starting point.</p>
 
-        <p>This project lives in the spirit of amateurism, making for the love of making. <em>Amateur</em>, from the French <em>aimer</em>, to love.</p>
+        <p>• This project lives in the spirit of amateurism, making for the love of making. <em>Amateur</em>, from the French <em>aimer</em>, to love.</p>
 
-        <p>Simple algorithms shape the work. Sometimes self-contained, sometimes colliding with images, words, and worlds already spinning.</p>`
+        <p>• Simple algorithms shape the work. Sometimes self-contained, sometimes colliding with images, words, and worlds already spinning.</p>`
     },
     products1: {
         title: '<h3 style="font-family: var(--body-font)">Drawings</h3>',
