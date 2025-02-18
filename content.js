@@ -22,15 +22,15 @@ const quotes = [
     },
     {
         text: "dubito ergo sum",
-        author: "TALACH"
+        author: ""
     },
     {
         text: "Where is my yesterday self?",
-        author: "Fernando Pessoa"
+        author: ""
     },
     {
-        text: "Man shouldn't be able to see his own face--there's nothing more sinister. Nature gave him the gift of not being able to see it, and of not being able to stare into his own eyes.",
-        author: "Fernando Pessoa"
+        text: "“Le Poète se fait voyant par un long, immense et raisonné dérèglement de tous les sens.”",
+        author: "Arthur Rimbaud"
     },
     {
         text: "I am nothing. I'll never be anything. I couldn't want to be something. Apart from that, I have in me all the dreams in the world.",
@@ -45,8 +45,8 @@ const quotes = [
         author: "Fernando Pessoa"
     },
     {
-        text: "There are ships sailing to many ports, but not a single one goes where life is not painful.",
-        author: "Fernando Pessoa"
+        text: " ...all alike the Slaves of our respective Dimensional prejudices",
+        author: "EA Abbott"
     },
     {
         text: "To write is to forget. Literature is the most agreeable way of ignoring life.",
@@ -63,7 +63,28 @@ const quotes = [
     {
         text: "Life is what we make of it. Travel is the traveler. What we see isn't what we see but what we are.",
         author: "Fernando Pessoa"
-    }
+    }, 
+    {
+        text: "“Un soir, j'ai assis la Beauté sur mes genoux. - Et je l'ai trouvée amère.",
+        author: "Arthur Rimbaud"
+    },
+    {
+        text: "“Les aubes sont navrantes. Toute lune est atroce et tout soleil amer.”",
+        author: "Arthur Rimbaud"
+    },
+    {
+        text: "Pour l'enfant, amoureux de cartes et d'estampes, L'univers est égal à son vaste appétit. Ah! que le monde est grand à la clarté des lampes! Aux yeux du souvenir que le monde est petit!",
+        author: "Baudelaire"
+    },
+    {
+        text: "Etonnants voyageurs! quelles nobles histoires Nous lisons dans vos yeux profonds comme les mers! Montrez-nous les écrins de vos riches mémoires, Ces bijoux merveilleux, faits d'astres et d'éthers.",
+        author: "Baudelaire"
+    }, 
+    {
+        text: "“La vie est un long fleuve tranquille.”",
+        author: "Baudelaire"
+    },
+
 ];
 
 function getRandomQuote() {
