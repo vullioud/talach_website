@@ -3,11 +3,12 @@
    ========================================================================== */
 :root {
     /* Colors */
-    --primary-color: #F05E1C;
-    --secondary-color: #FCAF2;
+    --primary-color: #00FFB3;     /* Bright cyan */
+    --secondary-color: #FF2E6E;   /* Hot pink */
+    --tertiary-color: #FFB300;    /* Golden yellow */
     --background-color: #0B1013;
-    --text-color: rgba(255, 255, 255, 0.6);
-    --text-color-bright: rgba(255, 255, 255, 0.9);
+    --text-color: rgba(255, 255, 255, 0.85);  /* Increased contrast */
+    --text-color-bright: rgba(255, 255, 255, 0.95);
     --text-color-dim: rgba(255, 255, 255, 0.7);
     --text-secondary: #CCCCCC;
     --stroke-color: var(--menu-color, #00FFB3);
@@ -35,6 +36,29 @@
     --content-max-width: 1600px;
     --text-frame-width: 1600px;
     --manifesto-padding: 1.5rem;
+    --noise-base-frequency: 0.65;
+    --noise-opacity: 0.98;
+    --noise-scale: 1;
+
+    /* New z-index variables */
+    --z-grain: 10;
+    --z-content: 15;
+    --z-carousel: 20;
+    --z-header: 30;
+
+    --primary-color-rgb: 0, 255, 179;
+    --secondary-color-rgb: 255, 46, 110;
+    --page-background: #0f1519;
+
+    --grain-opacity: 0.08;
+    --grain-scale: 1.5;
+    --grain-intensity: 0.1;
+
+    /* Color Schemes */
+    --color-scheme-1: #00FFB3;  /* Original cyan */
+    --color-scheme-2: #FF2E6E;  /* Pink */
+    --color-scheme-3: #B300FF;  /* Purple */
+    --color-scheme-4: #FFB300;  /* Gold */
 }
 
 /* ==========================================================================
@@ -65,7 +89,7 @@
 
 body {
     font-family: var(--body-font);
-    background: #1c1c1c;
+    background: var(--page-background);
     color: var(--text-color);
     line-height: 2.2;
     min-height: 100vh;
@@ -85,6 +109,7 @@ canvas#background {
     display: block;
     background: transparent;
     pointer-events: none;
+    filter: url(#noiseFilter);
 }
 
 .first-page {
@@ -225,18 +250,18 @@ nav ul a:hover {
     margin: 0;
     padding: 0 1rem;
     margin-bottom: 2rem;
+    opacity: 1;
+    z-index: 5;
 }
 
 .section-title h3 {
-    font-family: var(--title-font);
-    font-weight: normal;
-    font-size: var(--title-size);
-    line-height: 1.1;
-    color: var(--text-color-bright);
-    text-align: left;
-    margin: 1rem 0;
-    opacity: 0.8;
-    display: block !important;
+    font-family: var(--title-font) !important;
+    font-size: min(6vw, 2.8rem) !important;
+    text-align: center !important;
+    width: 100%;
+    padding: 1rem 0 !important;
+    margin: 2rem auto !important;
+    border-bottom: none !important;
 }
 
 .section-text {
@@ -244,6 +269,11 @@ nav ul a:hover {
     max-width: var(--content-max-width);
     margin: 0 auto;
     padding: 0 1rem;
+    position: relative;
+    z-index: 15;
+    color: var(--text-color);
+    mix-blend-mode: normal;
+    background: transparent;
 }
 
 .section-text p {
@@ -294,69 +324,27 @@ nav ul a:hover {
    ========================================================================== */
 .product-grid {
     display: grid;
-    grid-template-columns: repeat(4, 1fr) !important;
-    gap: 1rem !important;
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    gap: 1rem; /* Reduced from 2rem */
     width: 100%;
-    max-width: 1600px;
-    margin: 1rem auto;
-    padding: 0;
+    max-width: var(--content-max-width);
+    margin: 0 auto;
 }
 
 .product-card {
-    width: 90% !important;
-    margin: 0 auto;
-    padding: 0;
-    background: transparent;
-    border: none;
-    aspect-ratio: 1/1.414;
-}
-
-.product-card img {
+    position: relative;
     width: 100%;
-    height: 100%;
-    object-fit: contain;
-    background: transparent;
-    border: none;
-    aspect-ratio: 1/1.414;
+    cursor: pointer;
+    transition: transform 0.3s ease;
 }
 
 .carousel {
-    width: 100%;
-    height: 100%;
     position: relative;
+    width: 100%;
+    padding-bottom: 100%; /* Square aspect ratio */
     overflow: hidden;
-    margin: 0;
-    padding: 0;
 }
 
-/* Update responsive breakpoints */
-@media (max-width: 1400px) {
-    .product-grid {
-        grid-template-columns: repeat(3, 1fr) !important;
-        gap: 0.8rem !important;
-    }
-}
-
-@media (max-width: 1024px) {
-    .product-grid {
-        grid-template-columns: repeat(2, 1fr) !important;
-        gap: 0.8rem !important;
-    }
-}
-
-@media (max-width: 600px) {
-    .product-grid {
-        grid-template-columns: repeat(1, 1fr) !important;
-        gap: 1rem !important;
-    }
-    .product-card {
-        width: 100% !important;
-    }
-}
-
-/* ==========================================================================
-   Carousel Styles
-   ========================================================================== */
 .carousel-images {
     position: absolute;
     top: 0;
@@ -364,32 +352,49 @@ nav ul a:hover {
     width: 100%;
     height: 100%;
     display: flex;
-    transition: transform 0.5s ease;
+    transition: transform 0.3s ease;
 }
 
 .carousel-images img {
-    min-width: 100%;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%; 
     height: 100%;
     object-fit: contain;
-    flex-shrink: 0;
-    aspect-ratio: 1/1.414; /* A4 ratio */
+}
+
+/* Fix multi-image carousels */
+.multi-image .carousel-images {
+    display: flex;
+    flex-wrap: nowrap;
+}
+
+.multi-image .carousel-images img {
+    position: relative; /* Not absolute */
+    flex: 0 0 100%; /* Each image takes full carousel width */
 }
 
 .carousel-button {
     position: absolute;
     top: 50%;
     transform: translateY(-50%);
-    background: rgba(0, 0, 0, 0.5);
-    color: white;
-    border: none;
-    padding: 1rem;
+    background: rgba(0, 0, 0, 0.7);
+    color: var(--text-color-bright);
+    border: 1px solid var(--primary-color);
+    padding: 0.8rem;
     cursor: pointer;
-    z-index: 4;
-    transition: background 0.3s ease;
+    z-index: 20;
+    opacity: 0;
+    transition: opacity 0.3s ease, background-color 0.3s ease;
+}
+
+.carousel:hover .carousel-button {
+    opacity: 1;
 }
 
 .carousel-button:hover {
-    background: rgba(0, 0, 0, 0.8);
+    background: rgba(0, 0, 0, 0.9);
 }
 
 .carousel-button.prev {
@@ -398,6 +403,77 @@ nav ul a:hover {
 
 .carousel-button.next {
     right: 0;
+}
+
+/* Responsive Grid */
+@media (max-width: 1600px) {
+    .product-grid {
+        grid-template-columns: repeat(4, 1fr) !important;
+    }
+}
+
+@media (max-width: 1200px) {
+    .product-grid {
+        grid-template-columns: repeat(3, 1fr) !important;
+    }
+}
+
+@media (max-width: 900px) {
+    .product-grid {
+        grid-template-columns: repeat(2, 1fr) !important;
+    }
+}
+
+@media (max-width: 600px) {
+    .product-grid {
+        grid-template-columns: repeat(1, 1fr) !important;
+    }
+    .product-card {
+        width: 100% !important;
+    }
+}
+
+/* Conditional Carousel */
+.image-container.carousel {
+    position: relative;
+    height: 100%;
+    width: 100%;
+}
+
+.image-container.carousel img {
+    position: absolute;
+    top: 0;
+    left: 0;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.image-container.carousel img.active {
+    opacity: 1;
+    position: relative;
+}
+
+.carousel-dots {
+    position: absolute;
+    bottom: 12px;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    gap: 8px;
+    z-index: 10;
+}
+
+.carousel-dots .dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.3);
+    cursor: pointer;
+    transition: background 0.3s ease;
+}
+
+.carousel-dots .dot.active {
+    background: rgba(255,255,255,0.9);
 }
 
 /* ==========================================================================
@@ -434,6 +510,7 @@ nav ul a:hover {
     font-size: min(3vw, 1.8rem);
     color: rgba(255, 255, 255, 0.8);
     letter-spacing: 0.05em;
+    margin-bottom: 1rem;
 }
 
 /* ==========================================================================
@@ -474,8 +551,9 @@ nav ul a:hover {
     color: var(--text-color-bright);
     text-align: left;
     margin: 1rem 0;
-    opacity: 0.8;
-    display: block !important;
+    opacity: 1;
+    text-shadow: 1px 1px 2px rgba(0,0,0,0.2);
+    border-bottom: none !important;
 }
 
 .section-text {
@@ -511,7 +589,7 @@ nav ul a:hover {
 /* Base styles with improved accessibility */
 body {
     font-family: var(--body-font);
-    background: #1c1c1c;
+    background: var(--page-background);
     color: var(--text-color);
     line-height: 2.2;
     min-height: 100vh;
@@ -657,27 +735,8 @@ nav ul a:hover {
 }
 
 /* Enhanced product cards */
-.product-card {
-    width: 100%;
-    padding: 0.8rem;
-    background: rgba(0, 12, 25, 0.5);
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    transition: transform var(--transition-speed) ease;
-    margin-bottom: 1rem;
-}
-
 .product-card:hover {
     transform: translateY(-5px);
-}
-
-.product-card img {
-    width: 100%;
-    height: auto;
-    object-fit: contain;
-    background: rgba(0, 12, 25, 0.3);
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    border-radius: 4px;
-    aspect-ratio: 1/1.414; /* A4 ratio */
 }
 
 .product-card h3 {
@@ -818,8 +877,8 @@ img {
     color: var(--text-color-bright);
     text-align: left;
     margin: 1rem 0;
-    opacity: 0.8;
-    display: block !important;
+    opacity: 1;
+    text-shadow: 1px 1px 2px rgba(0,0,0,0.2);
 }
 
 .section-text {
@@ -885,7 +944,7 @@ img {
 .products-section {
     display: block;
     width: 100%;
-    padding: var(--section-padding);
+    padding: var(--section-padding) 0;
     background: var(--section-background);
     min-height: fit-content;
     margin: 0;
@@ -924,10 +983,12 @@ img {
     max-width: 1600px;
     margin-left: auto;
     margin-right: auto;
+    grid-auto-rows: 1fr;
+    margin-bottom: 0;
 }
 
 .product-card {
-    width: 66.67%;  /* 2/3 of original size */
+    width: 95% !important;
     margin: 0 auto;
     padding: 0;
     background: transparent;
@@ -1492,17 +1553,19 @@ nav ul a:hover {
     height: 150px;
     cursor: pointer;
     pointer-events: auto;
+    filter: none !important;
 }
 
 .first-window-logo img {
     width: 100%;
     height: 100%;
     object-fit: contain;
-    transition: transform 0.3s ease;
+    transition: opacity 0.3s ease;
+    opacity: 0.9;
 }
 
 .first-window-logo:hover img {
-    transform: scale(1.1);
+    opacity: 1;
 }
 
 @media (max-width: 768px) {
@@ -1668,30 +1731,508 @@ nav ul a:hover {
     color: var(--text-color-dim);
 }
 
-/* Manifesto Section adjustments */
+/* Manifesto Section Adjustments */
 .manifesto-section {
-    display: block;
+    max-width: 100% !important;
     width: 100%;
-    padding: var(--section-padding);
-    background: var(--section-background);
+    padding: 4rem 2rem !important;
+    margin: 4rem 0 !important;
+    border-left: none !important;
+    backdrop-filter: blur(8px) !important;
+    -webkit-backdrop-filter: blur(8px) !important;
+    position: relative !important;
+    z-index: var(--z-content) !important;
+}
+
+/* Page Structure Background */
+body::after {
+    content: none !important;
+}
+
+/* Logo Adjustments */
+.first-window-logo img {
+    background: transparent !important;
+    padding: 0 !important;
+    border-radius: 0 !important;
+    filter: none !important;
+}
+
+/* Final Grain Effect */
+body::before {
+    content: '';
+    position: fixed;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background-image: none !important;
+    opacity: 0.25;
+    background-size: 150px;
+    z-index: var(--z-grain);
+    pointer-events: none;
+    mix-blend-mode: multiply;
+    filter: contrast(200%) brightness(1.2);
+}
+
+/* Ensure content stays above grain */
+.content {
+    position: relative;
+    z-index: var(--z-content);
+}
+
+/* Prevent grain overlay on images */
+img, .product-card img, .carousel-images img, .dynamic-logo {
+    position: relative;
+    z-index: 11;
+}
+
+/* Adjust text elements to show through grain */
+.section-text, 
+.section-title, 
+nav ul a,
+.contact-popup p,
+.contact-popup .email,
+.store-link {
+    position: relative;
+    z-index: 15;
+    color: var(--text-color);
+    mix-blend-mode: normal;
+    background: transparent;
+}
+
+/* Ensure canvas stays behind grain */
+canvas#background {
+    z-index: 1;
+}
+
+/* Ensure menu stays above grain */
+header {
+    z-index: var(--z-header);
+}
+
+/* Ensure popup stays above grain */
+.contact-popup {
+    z-index: 1001;
+}
+.popup-overlay {
+    z-index: 1000;
+}
+
+/* Add carousel controls */
+.carousel-controls {
+    position: absolute;
+    right: 20px;
+    bottom: 20px;
+    display: flex;
+    gap: 1rem;
+    z-index: 100;
+}
+
+.carousel-nav-button {
+    background: rgba(255,255,255,0.1);
+    border: 1px solid var(--stroke-color);
+    padding: 8px 16px;
+    cursor: pointer;
+}
+
+/* Text visibility fixes */
+:root {
+    /* New contrasting colors based on color wheel triangle */
+    --primary-color: #00FFB3;     /* Bright cyan */
+    --secondary-color: #FF2E6E;   /* Hot pink */
+    --tertiary-color: #FFB300;    /* Golden yellow */
+    --text-color: rgba(255, 255, 255, 0.85);  /* Increased contrast */
+    --text-color-bright: rgba(255, 255, 255, 0.95);
+    --background-color: #0B1013;
+}
+
+.section-text, 
+.section-title,
+.manifesto-section .section-text,
+.contact-section .section-text {
+    position: relative;
+    z-index: 15;  /* Increased to appear above grain */
+    color: var(--text-color);
+    mix-blend-mode: normal;
+    background: transparent;
+}
+
+.section-title h3 {
+    color: var(--text-color-bright) !important;
+    opacity: 1 !important;
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5); /* A bit stronger shadow */
+}
+
+/* Ensure contact section text is visible */
+.contact-section .section-title h3,
+.contact-section .contact-links a {
+    color: var(--text-color-bright);
+    z-index: 15;
+    position: relative;
+}
+
+/* Align manifesto and contact titles like the others */
+.manifesto-section .section-title h3,
+.contact-section .section-title h3 {
+    text-align: left; /* or center, depending on your preferred alignment */
+    margin-left: 0;   /* remove extra left spacing if needed */
+}
+
+/* If your .section-title wrapper also needs alignment */
+.manifesto-section .section-title,
+.contact-section .section-title {
+    text-align: left; /* ensures consistent alignment with h3 */
+}
+
+/* Align all section titles consistently */
+.section-title h3 {
+    text-align: left;
+    margin: 2rem 0 !important;
+    padding-left: 2rem !important;
+    width: calc(100% - 4rem) !important;
+}
+
+/* Specific contact section alignment */
+.contact-section .section-title h3 {
+    margin-bottom: 1rem;
+}
+
+/* Remove empty space between sections */
+.products-section {
+    padding: var(--section-padding) 0;
+    margin: 0;
+}
+
+.product-grid {
+    grid-auto-rows: 1fr;
+    margin-bottom: 0;
+}
+
+/* Fix product card sizing */
+.product-card {
+    width: 95% !important;
+    margin: 0 auto;
+}
+
+/* Remove extra space between sections */
+#manifesto {
+    padding-top: 1rem;
+    margin-top: -2rem;
+}
+
+.products-section:not(:first-child) {
+    padding-top: 0;
+}
+
+.product-grid {
+    row-gap: 0.2rem !important;
+}
+
+/* Manifesto Section Styling */
+.manifesto-section {
+    background: var(--section-background) !important;
     backdrop-filter: blur(5px);
     -webkit-backdrop-filter: blur(5px);
+    padding: var(--section-padding) 2rem;
+    margin: 4rem 0 !important;
+    position: relative;
+    z-index: var(--z-content);
 }
 
-.manifesto-section .section-content {
-    max-width: var(--content-max-width);
-    width: 100%;
-    margin: 0 auto;
-    padding: 0;
+/* Logo Positioning */
+.first-window-logo {
+    z-index: 1000; /* Higher than grain (10) and content (15) */
+    mix-blend-mode: normal;
+    filter: none !important;
 }
 
-.manifesto-section .section-title {
+.first-window-logo img {
+    background: transparent !important;
+    padding: 0 !important;
+    border-radius: 0 !important;
+    filter: none !important;
+}
+
+/* Grainy Frames */
+.products-section, 
+.manifesto-section,
+.quote-section {
+    position: relative;
+    overflow: hidden;
+}
+
+.products-section::before,
+.manifesto-section::before,
+.quote-section::before {
+    content: none !important;
+}
+
+/* Grainy background frames */
+.products-section,
+.manifesto-section {
+    position: relative;
+    background: rgba(255,255,255,0.03);
+}
+
+.products-section::after,
+.manifesto-section::after {
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+    opacity: 0.12;
+    background-size: 100px;
+    filter: contrast(150%) brightness(0.9);
+}
+
+/* Remove residual section spacing */
+.products-section:last-child {
+    margin-bottom: 0;
+    padding-bottom: 0;
+}
+
+#manifesto {
+    margin-top: 0 !important;
+    padding-top: 4rem !important;
+    background: rgba(255,255,255,0.02) !important;
+}
+
+/* Fix section background inheritance */
+.section-background {
+    background: transparent !important;
+}
+
+/* Unified Section Backgrounds */
+.products-section,
+.manifesto-section,
+.contact-section,
+.quote-section {
+    background: rgba(255,255,255,0.02) !important;
+    backdrop-filter: blur(8px) !important;
+    -webkit-backdrop-filter: blur(8px) !important;
+    border: 1px solid rgba(255,255,255,0.1) !important;
+    margin: 4rem 0 !important;
+    padding: 4rem 2rem !important;
+    position: relative !important;
+}
+
+/* Remove all individual section background overrides */
+#products3, #manifesto, #contact, #quote {
+    background: rgba(255,255,255,0.02) !important;
+}
+
+/* Store CTA Section */
+.store-cta {
+    text-align: center;
+    margin: 4rem auto;
+    padding: 1rem;
+    max-width: 300px;
     width: 100%;
-    max-width: var(--content-max-width);
-    margin: 0 auto 2rem auto;
+}
+
+/* Product Card Store Link */
+.product-card .store-link {
+    margin-top: 1rem;
+    width: 100%;
+    text-align: center;
+    font-size: 1rem;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .store-cta {
+        margin: 1rem auto;
+        padding: 0.5rem;
+    }
+}
+
+/* Remove dotted lines */
+.left-panel::after {
+    display: none;
+}
+
+.product-grid::before {
+    display: none;
+}
+
+.section-text p i {
+    font-size: 1.8rem;
+    display: block;
+    text-align: center;
+    margin: 2rem 0;
+    line-height: 1.4;
+    color: rgba(255, 255, 255, 0.8);
+}
+
+.right-panel .section-text {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+    min-height: 80vh;
+}
+
+.product-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 2rem;
+    width: 100%;
+    margin-top: 2rem;
     padding: 0 1rem;
 }
 
+.product-card {
+    width: 100%;
+    aspect-ratio: 1/1.414;
+    margin-bottom: 2rem;
+}
+
+@media (max-width: 1024px) {
+    .product-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (max-width: 768px) {
+    .product-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+.first-window-logo {
+    position: fixed;
+    bottom: 30px;
+    right: 30px;
+    z-index: 3;
+    width: 150px;
+    height: 150px;
+    cursor: pointer;
+    pointer-events: auto;
+    filter: none !important;
+}
+
+.first-window-logo img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    transition: opacity 0.3s ease;
+    opacity: 0.9;
+}
+
+.first-window-logo:hover img {
+    opacity: 1;
+}
+
+@media (max-width: 768px) {
+    .first-window-logo {
+        width: 120px;
+        height: 120px;
+        bottom: 20px;
+        right: 20px;
+    }
+}
+
+/* Popup styles */
+.contact-popup {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: var(--section-background);
+    padding: 2rem;
+    border-radius: 8px;
+    z-index: 1000;
+    text-align: center;
+    display: none;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(5px);
+    -webkit-backdrop-filter: blur(5px);
+    max-width: 90%;
+    width: 400px;
+}
+
+.contact-popup.active {
+    display: block;
+}
+
+.contact-popup p {
+    color: rgba(255, 255, 255, 0.6);
+    font-family: var(--contact-font);
+    font-size: 1.4rem;
+    line-height: 1.6;
+    margin-bottom: 1rem;
+}
+
+.contact-popup .email {
+    color: rgba(255, 255, 255, 0.6);
+    font-family: var(--contact-font);
+    font-size: 1.6rem;
+    display: block;
+    margin-top: 1rem;
+}
+
+.popup-close {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background: transparent;
+    border: none;
+    color: rgba(255, 255, 255, 0.8);
+    font-size: 1.5rem;
+    cursor: pointer;
+    padding: 5px;
+    line-height: 1;
+}
+
+.popup-close:hover {
+    color: #FFA500;
+}
+
+.popup-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: var(--section-background);
+    backdrop-filter: blur(5px);
+    -webkit-backdrop-filter: blur(5px);
+    z-index: 999;
+    display: none;
+}
+
+.popup-overlay.active {
+    display: block;
+}
+
+/* Update text width variables */
+:root {
+    /* ... other variables ... */
+    --content-max-width: 1600px;  /* Increased from 1200px */
+    --text-frame-width: 1600px;   /* Increased from 800px */
+}
+
+/* Update section text widths */
+.section-text {
+    width: 100%;
+    max-width: var(--content-max-width);
+    margin: 0 auto;
+    padding: 0 1rem;
+}
+
+/* Clean up duplicate text styles and consolidate */
+.section-text p,
+.manifesto-section p,
+.product-description p {
+    font-family: var(--body-font);
+    font-size: var(--body-size);
+    line-height: var(--text-spacing);
+    color: var(--text-color);
+    text-align: justify;
+    margin-bottom: 1rem;
+    white-space: pre-line;
+}
+
+/* Update manifesto section styles */
 .manifesto-section .section-text {
     width: 100%;
     max-width: var(--content-max-width);
@@ -1699,20 +2240,1251 @@ nav ul a:hover {
     padding: 0 1rem;
 }
 
-/* Adjust product section title for consistency */
-.products-section .section-title {
-    width: 100%;
+/* Remove duplicate Impact font declarations */
+.products-section .section-title h3,
+.contact-section h3 {
+    font-family: var(--title-font);
+}
+
+/* Clean up quote section width */
+.quote-section .section-content {
     max-width: var(--content-max-width);
-    margin: 0 auto 2rem auto;
+    text-align: center;
+}
+
+/* Quote Section */
+.quote-section {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: fit-content;
+    padding: calc(var(--section-padding) * 1.5);
+    background: var(--section-background);
+    backdrop-filter: blur(5px);
+    -webkit-backdrop-filter: blur(5px);
+}
+
+.quote-section .section-content {
+    max-width: 800px;  /* Keep quotes more narrow for better readability */
+    text-align: center;
+}
+
+.quote-text {
+    font-family: var(--quote-font);
+    font-size: var(--quote-size);
+    line-height: 1.4;
+    color: var(--text-color-bright);
+}
+
+.quote-author {
+    display: block;
+    margin-top: calc(var(--section-spacing) / 2);
+    font-family: var(--quote-font);
+    font-size: var(--quote-author-size);
+    color: var(--text-color-dim);
+}
+
+/* Manifesto Section Adjustments */
+.manifesto-section {
+    max-width: 100% !important;
+    width: 100%;
+    padding: 4rem 2rem !important;
+    margin: 4rem 0 !important;
+    border-left: none !important;
+    backdrop-filter: blur(8px) !important;
+    -webkit-backdrop-filter: blur(8px) !important;
+    position: relative !important;
+    z-index: var(--z-content) !important;
+}
+
+/* Page Structure Background */
+body::after {
+    content: none !important;
+}
+
+/* Logo Adjustments */
+.first-window-logo img {
+    background: transparent !important;
+    padding: 0 !important;
+    border-radius: 0 !important;
+    filter: none !important;
+}
+
+/* Final Grain Effect */
+body::before {
+    content: '';
+    position: fixed;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background-image: none !important;
+    opacity: 0.25;
+    background-size: 150px;
+    z-index: var(--z-grain);
+    pointer-events: none;
+    mix-blend-mode: multiply;
+    filter: contrast(200%) brightness(1.2);
+}
+
+/* Ensure content stays above grain */
+.content {
+    position: relative;
+    z-index: var(--z-content);
+}
+
+/* Prevent grain overlay on images */
+img, .product-card img, .carousel-images img, .dynamic-logo {
+    position: relative;
+    z-index: 11;
+}
+
+/* Adjust text elements to show through grain */
+.section-text, 
+.section-title, 
+nav ul a,
+.contact-popup p,
+.contact-popup .email,
+.store-link {
+    position: relative;
+    z-index: 15;
+    color: var(--text-color);
+    mix-blend-mode: normal;
+    background: transparent;
+}
+
+/* Ensure canvas stays behind grain */
+canvas#background {
+    z-index: 1;
+}
+
+/* Ensure menu stays above grain */
+header {
+    z-index: var(--z-header);
+}
+
+/* Ensure popup stays above grain */
+.contact-popup {
+    z-index: 1001;
+}
+.popup-overlay {
+    z-index: 1000;
+}
+
+/* Add carousel controls */
+.carousel-controls {
+    position: absolute;
+    right: 20px;
+    bottom: 20px;
+    display: flex;
+    gap: 1rem;
+    z-index: 100;
+}
+
+.carousel-nav-button {
+    background: rgba(255,255,255,0.1);
+    border: 1px solid var(--stroke-color);
+    padding: 8px 16px;
+    cursor: pointer;
+}
+
+/* Text visibility fixes */
+:root {
+    /* New contrasting colors based on color wheel triangle */
+    --primary-color: #00FFB3;     /* Bright cyan */
+    --secondary-color: #FF2E6E;   /* Hot pink */
+    --tertiary-color: #FFB300;    /* Golden yellow */
+    --text-color: rgba(255, 255, 255, 0.85);  /* Increased contrast */
+    --text-color-bright: rgba(255, 255, 255, 0.95);
+    --background-color: #0B1013;
+}
+
+.section-text, 
+.section-title,
+.manifesto-section .section-text,
+.contact-section .section-text {
+    position: relative;
+    z-index: 15;  /* Increased to appear above grain */
+    color: var(--text-color);
+    mix-blend-mode: normal;
+    background: transparent;
+}
+
+.section-title h3 {
+    color: var(--text-color-bright) !important;
+    opacity: 1 !important;
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5); /* A bit stronger shadow */
+}
+
+/* Ensure contact section text is visible */
+.contact-section .section-title h3,
+.contact-section .contact-links a {
+    color: var(--text-color-bright);
+    z-index: 15;
+    position: relative;
+}
+
+/* Align manifesto and contact titles like the others */
+.manifesto-section .section-title h3,
+.contact-section .section-title h3 {
+    text-align: left; /* or center, depending on your preferred alignment */
+    margin-left: 0;   /* remove extra left spacing if needed */
+}
+
+/* If your .section-title wrapper also needs alignment */
+.manifesto-section .section-title,
+.contact-section .section-title {
+    text-align: left; /* ensures consistent alignment with h3 */
+}
+
+/* Align all section titles consistently */
+.section-title h3 {
+    text-align: left;
+    margin: 2rem 0 !important;
+    padding-left: 2rem !important;
+    width: calc(100% - 4rem) !important;
+}
+
+/* Specific contact section alignment */
+.contact-section .section-title h3 {
+    margin-bottom: 1rem;
+}
+
+/* Remove empty space between sections */
+.products-section {
+    padding: var(--section-padding) 0;
+    margin: 0;
+}
+
+.product-grid {
+    grid-auto-rows: 1fr;
+    margin-bottom: 0;
+}
+
+/* Fix product card sizing */
+.product-card {
+    width: 95% !important;
+    margin: 0 auto;
+}
+
+/* Remove extra space between sections */
+#manifesto {
+    padding-top: 1rem;
+    margin-top: -2rem;
+}
+
+.products-section:not(:first-child) {
+    padding-top: 0;
+}
+
+.product-grid {
+    row-gap: 0.2rem !important;
+}
+
+/* Manifesto Section Styling */
+.manifesto-section {
+    background: var(--section-background) !important;
+    backdrop-filter: blur(5px);
+    -webkit-backdrop-filter: blur(5px);
+    padding: var(--section-padding) 2rem;
+    margin: 4rem 0 !important;
+    position: relative;
+    z-index: var(--z-content);
+}
+
+/* Logo Positioning */
+.first-window-logo {
+    z-index: 1000; /* Higher than grain (10) and content (15) */
+    mix-blend-mode: normal;
+    filter: none !important;
+}
+
+.first-window-logo img {
+    background: transparent !important;
+    padding: 0 !important;
+    border-radius: 0 !important;
+    filter: none !important;
+}
+
+/* Grainy Frames */
+.products-section, 
+.manifesto-section,
+.quote-section {
+    position: relative;
+    overflow: hidden;
+}
+
+.products-section::before,
+.manifesto-section::before,
+.quote-section::before {
+    content: none !important;
+}
+
+/* Grainy background frames */
+.products-section,
+.manifesto-section {
+    position: relative;
+    background: rgba(255,255,255,0.03);
+}
+
+.products-section::after,
+.manifesto-section::after {
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+    opacity: 0.12;
+    background-size: 100px;
+    filter: contrast(150%) brightness(0.9);
+}
+
+/* Remove residual section spacing */
+.products-section:last-child {
+    margin-bottom: 0;
+    padding-bottom: 0;
+}
+
+#manifesto {
+    margin-top: 0 !important;
+    padding-top: 4rem !important;
+    background: rgba(255,255,255,0.02) !important;
+}
+
+/* Fix section background inheritance */
+.section-background {
+    background: transparent !important;
+}
+
+/* Unified Section Backgrounds */
+.products-section,
+.manifesto-section,
+.contact-section,
+.quote-section {
+    background: rgba(255,255,255,0.02) !important;
+    backdrop-filter: blur(8px) !important;
+    -webkit-backdrop-filter: blur(8px) !important;
+    border: 1px solid rgba(255,255,255,0.1) !important;
+    margin: 4rem 0 !important;
+    padding: 4rem 2rem !important;
+    position: relative !important;
+}
+
+/* Remove all individual section background overrides */
+#products3, #manifesto, #contact, #quote {
+    background: rgba(255,255,255,0.02) !important;
+}
+
+/* Store CTA Section */
+.store-cta {
+    text-align: center;
+    margin: 4rem auto;
+    padding: 1rem;
+    max-width: 300px;
+    width: 100%;
+}
+
+/* Product Card Store Link */
+.product-card .store-link {
+    margin-top: 1rem;
+    width: 100%;
+    text-align: center;
+    font-size: 1rem;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .store-cta {
+        margin: 1rem auto;
+        padding: 0.5rem;
+    }
+}
+
+/* Remove dotted lines */
+.left-panel::after {
+    display: none;
+}
+
+.product-grid::before {
+    display: none;
+}
+
+.section-text p i {
+    font-size: 1.8rem;
+    display: block;
+    text-align: center;
+    margin: 2rem 0;
+    line-height: 1.4;
+    color: rgba(255, 255, 255, 0.8);
+}
+
+.right-panel .section-text {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+    min-height: 80vh;
+}
+
+.product-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 2rem;
+    width: 100%;
+    margin-top: 2rem;
     padding: 0 1rem;
 }
 
-/* Add spacing for manifesto bullet points */
-.manifesto-section .section-text p {
-    margin-bottom: 2rem;  /* Increase from 1rem to 2rem */
+.product-card {
+    width: 100%;
+    aspect-ratio: 1/1.414;
+    margin-bottom: 2rem;
 }
 
-/* Adjust the last paragraph to not have extra bottom margin */
-.manifesto-section .section-text p:last-child {
+@media (max-width: 1024px) {
+    .product-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (max-width: 768px) {
+    .product-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+.first-window-logo {
+    position: fixed;
+    bottom: 30px;
+    right: 30px;
+    z-index: 3;
+    width: 150px;
+    height: 150px;
+    cursor: pointer;
+    pointer-events: auto;
+    filter: none !important;
+}
+
+.first-window-logo img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    transition: opacity 0.3s ease;
+    opacity: 0.9;
+}
+
+.first-window-logo:hover img {
+    opacity: 1;
+}
+
+@media (max-width: 768px) {
+    .first-window-logo {
+        width: 120px;
+        height: 120px;
+        bottom: 20px;
+        right: 20px;
+    }
+}
+
+/* Popup styles */
+.contact-popup {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: var(--section-background);
+    padding: 2rem;
+    border-radius: 8px;
+    z-index: 1000;
+    text-align: center;
+    display: none;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(5px);
+    -webkit-backdrop-filter: blur(5px);
+    max-width: 90%;
+    width: 400px;
+}
+
+.contact-popup.active {
+    display: block;
+}
+
+.contact-popup p {
+    color: rgba(255, 255, 255, 0.6);
+    font-family: var(--contact-font);
+    font-size: 1.4rem;
+    line-height: 1.6;
+    margin-bottom: 1rem;
+}
+
+.contact-popup .email {
+    color: rgba(255, 255, 255, 0.6);
+    font-family: var(--contact-font);
+    font-size: 1.6rem;
+    display: block;
+    margin-top: 1rem;
+}
+
+.popup-close {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background: transparent;
+    border: none;
+    color: rgba(255, 255, 255, 0.8);
+    font-size: 1.5rem;
+    cursor: pointer;
+    padding: 5px;
+    line-height: 1;
+}
+
+.popup-close:hover {
+    color: #FFA500;
+}
+
+.popup-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: var(--section-background);
+    backdrop-filter: blur(5px);
+    -webkit-backdrop-filter: blur(5px);
+    z-index: 999;
+    display: none;
+}
+
+.popup-overlay.active {
+    display: block;
+}
+
+/* Update text width variables */
+:root {
+    /* ... other variables ... */
+    --content-max-width: 1600px;  /* Increased from 1200px */
+    --text-frame-width: 1600px;   /* Increased from 800px */
+}
+
+/* Update section text widths */
+.section-text {
+    width: 100%;
+    max-width: var(--content-max-width);
+    margin: 0 auto;
+    padding: 0 1rem;
+}
+
+/* Clean up duplicate text styles and consolidate */
+.section-text p,
+.manifesto-section p,
+.product-description p {
+    font-family: var(--body-font);
+    font-size: var(--body-size);
+    line-height: var(--text-spacing);
+    color: var(--text-color);
+    text-align: justify;
+    margin-bottom: 1rem;
+    white-space: pre-line;
+}
+
+/* Update manifesto section styles */
+.manifesto-section .section-text {
+    width: 100%;
+    max-width: var(--content-max-width);
+    margin: 0 auto;
+    padding: 0 1rem;
+}
+
+/* Remove duplicate Impact font declarations */
+.products-section .section-title h3,
+.contact-section h3 {
+    font-family: var(--title-font);
+}
+
+/* Clean up quote section width */
+.quote-section .section-content {
+    max-width: var(--content-max-width);
+    text-align: center;
+}
+
+/* Quote Section */
+.quote-section {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: fit-content;
+    padding: calc(var(--section-padding) * 1.5);
+    background: var(--section-background);
+    backdrop-filter: blur(5px);
+    -webkit-backdrop-filter: blur(5px);
+}
+
+.quote-section .section-content {
+    max-width: 800px;  /* Keep quotes more narrow for better readability */
+    text-align: center;
+}
+
+.quote-text {
+    font-family: var(--quote-font);
+    font-size: var(--quote-size);
+    line-height: 1.4;
+    color: var(--text-color-bright);
+}
+
+.quote-author {
+    display: block;
+    margin-top: calc(var(--section-spacing) / 2);
+    font-family: var(--quote-font);
+    font-size: var(--quote-author-size);
+    color: var(--text-color-dim);
+}
+
+/* Manifesto Section Adjustments */
+.manifesto-section {
+    max-width: 100% !important;
+    width: 100%;
+    padding: 4rem 2rem !important;
+    margin: 4rem 0 !important;
+    border-left: none !important;
+    backdrop-filter: blur(8px);
+}
+
+/* Page Structure Background */
+body::after {
+    content: none !important;
+}
+
+/* Logo Adjustments */
+.first-window-logo img {
+    background: transparent !important;
+    padding: 0 !important;
+    border-radius: 0 !important;
+    filter: none !important;
+}
+
+/* Final Grain Effect */
+body::before {
+    content: '';
+    position: fixed;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background-image: none !important;
+    opacity: 0.25;
+    background-size: 150px;
+    z-index: var(--z-grain);
+    pointer-events: none;
+    mix-blend-mode: multiply;
+    filter: contrast(200%) brightness(1.2);
+}
+
+/* Ensure content stays above grain */
+.content {
+    position: relative;
+    z-index: var(--z-content);
+}
+
+/* Prevent grain overlay on images */
+img, .product-card img, .carousel-images img, .dynamic-logo {
+    position: relative;
+    z-index: 11;
+}
+
+/* Adjust text elements to show through grain */
+.section-text, 
+.section-title, 
+nav ul a,
+.contact-popup p,
+.contact-popup .email,
+.store-link {
+    position: relative;
+    z-index: 15;
+    color: var(--text-color);
+    mix-blend-mode: normal;
+    background: transparent;
+}
+
+/* Ensure canvas stays behind grain */
+canvas#background {
+    z-index: 1;
+}
+
+/* Ensure menu stays above grain */
+header {
+    z-index: var(--z-header);
+}
+
+/* Ensure popup stays above grain */
+.contact-popup {
+    z-index: 1001;
+}
+.popup-overlay {
+    z-index: 1000;
+}
+
+/* Add carousel controls */
+.carousel-controls {
+    position: absolute;
+    right: 20px;
+    bottom: 20px;
+    display: flex;
+    gap: 1rem;
+    z-index: 100;
+}
+
+.carousel-nav-button {
+    background: rgba(255,255,255,0.1);
+    border: 1px solid var(--stroke-color);
+    padding: 8px 16px;
+    cursor: pointer;
+}
+
+/* Text visibility fixes */
+:root {
+    /* New contrasting colors based on color wheel triangle */
+    --primary-color: #00FFB3;     /* Bright cyan */
+    --secondary-color: #FF2E6E;   /* Hot pink */
+    --tertiary-color: #FFB300;    /* Golden yellow */
+    --text-color: rgba(255, 255, 255, 0.85);  /* Increased contrast */
+    --text-color-bright: rgba(255, 255, 255, 0.95);
+    --background-color: #0B1013;
+}
+
+.section-text, 
+.section-title,
+.manifesto-section .section-text,
+.contact-section .section-text {
+    position: relative;
+    z-index: 15;  /* Increased to appear above grain */
+    color: var(--text-color);
+    mix-blend-mode: normal;
+    background: transparent;
+}
+
+.section-title h3 {
+    color: var(--text-color-bright) !important;
+    opacity: 1 !important;
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5); /* A bit stronger shadow */
+}
+
+/* Ensure contact section text is visible */
+.contact-section .section-title h3,
+.contact-section .contact-links a {
+    color: var(--text-color-bright);
+    z-index: 15;
+    position: relative;
+}
+
+/* Align manifesto and contact titles like the others */
+.manifesto-section .section-title h3,
+.contact-section .section-title h3 {
+    text-align: left; /* or center, depending on your preferred alignment */
+    margin-left: 0;   /* remove extra left spacing if needed */
+}
+
+/* If your .section-title wrapper also needs alignment */
+.manifesto-section .section-title,
+.contact-section .section-title {
+    text-align: left; /* ensures consistent alignment with h3 */
+}
+
+/* Align all section titles consistently */
+.section-title h3 {
+    text-align: left;
+    margin: 2rem 0 !important;
+    padding-left: 2rem !important;
+    width: calc(100% - 4rem) !important;
+}
+
+/* Specific contact section alignment */
+.contact-section .section-title h3 {
+    margin-bottom: 1rem;
+}
+
+/* Remove empty space between sections */
+.products-section {
+    padding: var(--section-padding) 0;
+    margin: 0;
+}
+
+.product-grid {
+    grid-auto-rows: 1fr;
     margin-bottom: 0;
-} 
+}
+
+/* Fix product card sizing */
+.product-card {
+    width: 95% !important;
+    margin: 0 auto;
+}
+
+/* Remove extra space between sections */
+#manifesto {
+    padding-top: 1rem;
+    margin-top: -2rem;
+}
+
+.products-section:not(:first-child) {
+    padding-top: 0;
+}
+
+.product-grid {
+    row-gap: 0.2rem !important;
+}
+
+/* Manifesto Section Styling */
+.manifesto-section {
+    background: var(--section-background) !important;
+    backdrop-filter: blur(5px);
+    -webkit-backdrop-filter: blur(5px);
+    padding: var(--section-padding) 2rem;
+    margin: 4rem 0 !important;
+    position: relative;
+    z-index: var(--z-content);
+}
+
+/* Logo Positioning */
+.first-window-logo {
+    z-index: 1000; /* Higher than grain (10) and content (15) */
+    mix-blend-mode: normal;
+    filter: none !important;
+}
+
+.first-window-logo img {
+    background: transparent !important;
+    padding: 0 !important;
+    border-radius: 0 !important;
+    filter: none !important;
+}
+
+/* Grainy Frames */
+.products-section, 
+.manifesto-section,
+.quote-section {
+    position: relative;
+    overflow: hidden;
+}
+
+.products-section::before,
+.manifesto-section::before,
+.quote-section::before {
+    content: none !important;
+}
+
+/* Grainy background frames */
+.products-section,
+.manifesto-section {
+    position: relative;
+    background: rgba(255,255,255,0.03);
+}
+
+.products-section::after,
+.manifesto-section::after {
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+    opacity: 0.12;
+    background-size: 100px;
+    filter: contrast(150%) brightness(0.9);
+}
+
+/* Remove residual section spacing */
+.products-section:last-child {
+    margin-bottom: 0;
+    padding-bottom: 0;
+}
+
+#manifesto {
+    margin-top: 0 !important;
+    padding-top: 4rem !important;
+    background: rgba(255,255,255,0.02) !important;
+}
+
+/* Fix section background inheritance */
+.section-background {
+    background: transparent !important;
+}
+
+/* Unified Section Backgrounds */
+.products-section,
+.manifesto-section,
+.contact-section,
+.quote-section {
+    background: rgba(255,255,255,0.02) !important;
+    backdrop-filter: blur(8px) !important;
+    -webkit-backdrop-filter: blur(8px) !important;
+    border: 1px solid rgba(255,255,255,0.1) !important;
+    margin: 4rem 0 !important;
+    padding: 4rem 2rem !important;
+    position: relative !important;
+}
+
+/* Remove residual spacing */
+#products3 {
+    margin-bottom: 4rem !important;
+    padding-bottom: 2rem !important;
+}
+
+/* Unified grain effect */
+.products-section::after,
+.manifesto-section::after,
+.contact-section::after,
+.quote-section::after {
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+    opacity: 0.12;
+    background-size: 100px;
+    filter: contrast(150%) brightness(0.9);
+}
+
+/* Remove duplicate title styles */
+.section-title h3 {
+    font-family: var(--title-font);
+    font-size: min(6vw, 2.8rem);
+    text-align: center;
+    width: 100%;
+    padding: 1rem 0;
+    margin: 2rem auto;
+    color: var(--text-color-bright);
+    text-shadow: 1px 1px 2px rgba(0,0,0,0.5);
+}
+
+/* Clean up residual styles */
+#manifesto {
+    margin-top: 0 !important;
+    padding-top: 4rem !important;
+}
+
+.contact-section {
+    margin-top: 0 !important;
+    padding-top: 3rem !important;
+}
+
+/* Remove obsolete gradient backgrounds */
+body::after {
+    content: none !important;
+}
+
+/* Contact Section Text Sizing */
+.contact-section .section-title h3,
+.contact-section .contact-links a {
+    font-size: 1.4rem !important;
+    font-family: var(--body-font) !important;
+    letter-spacing: 0.8px !important;
+    line-height: 1.5 !important;
+}
+
+.contact-section .contact-links {
+    margin-top: 1.5rem !important;
+}
+
+/* Final removal of blue background */
+#products3::after {
+    content: none !important;
+    background: transparent !important;
+    box-shadow: none !important;
+}
+
+#products3 {
+    background: transparent !important;
+    box-shadow: none !important;
+    border: none !important;
+    margin: 0 !important;
+    padding: 0 !important;
+}
+
+#manifesto {
+    margin-top: 0 !important;
+    padding-top: 4rem !important;
+}
+
+/* Remove all trace of blue background */
+#products3 + section::before {
+    content: none !important;
+    background: transparent !important;
+}
+
+/* Fix section spacing */
+#products3 {
+    margin-bottom: 4rem !important;
+    padding-bottom: 2rem !important;
+}
+
+/* Remove conflicting gradient */
+.products-section::after {
+    background-image: none !important;
+}
+
+/* Unified section spacing */
+.products-section,
+.manifesto-section {
+    margin: 4rem 0 !important;
+    padding: 4rem 2rem !important;
+    gap: 2rem !important;
+}
+
+/* Eliminate last blue fragment */
+#products3 .product-grid::after {
+    content: none !important;
+    background: transparent !important;
+    box-shadow: none !important;
+}
+
+#products3 {
+    border-bottom: none !important;
+    margin-bottom: 4rem !important;
+    padding-bottom: 0 !important;
+}
+
+/* Unified title alignment */
+.section-title h3 {
+    text-align: left !important;
+    margin: 2rem 0 !important;
+    padding-left: 2rem !important;
+    width: calc(100% - 4rem) !important;
+    border-left: 2px solid var(--primary-color) !important;
+}
+
+/* Consistent section spacing */
+.products-section,
+.manifesto-section,
+.contact-section {
+    margin: 4rem 0 !important;
+    padding: 4rem 2rem !important;
+    gap: 2rem !important;
+}
+
+/* Equal vertical rhythm */
+#products3 {
+    padding-bottom: 4rem !important;
+    margin-bottom: 0 !important;
+}
+
+#manifesto {
+    padding-top: 4rem !important;
+    margin-top: 0 !important;
+}
+
+/* Add quote section to unified styles */
+.quote-section {
+    background: rgba(255,255,255,0.02) !important;
+    backdrop-filter: blur(8px) !important;
+    -webkit-backdrop-filter: blur(8px) !important;
+    margin: 4rem 0 !important;
+    padding: 4rem 2rem !important;
+    border: 1px solid rgba(255,255,255,0.1) !important;
+}
+
+/* Ensure quote appears between products3 and manifesto */
+#products3 + #quote {
+    display: block !important;
+    opacity: 1 !important;
+}
+
+/* Final title alignment fix */
+.section-title h3 {
+    text-align: left !important;
+    padding-left: 2rem !important;
+    margin: 3rem 0 2rem !important;
+    width: calc(100% - 4rem) !important;
+    border-left: 2px solid var(--primary-color) !important;
+}
+
+/* Random color scheme application */
+body:has(.automata) {
+    animation: colorCycle 30s infinite linear;
+}
+
+@keyframes colorCycle {
+    0%, 100% { --stroke-color: var(--color-scheme-1); }
+    25% { --stroke-color: var(--color-scheme-2); }
+    50% { --stroke-color: var(--color-scheme-3); }
+    75% { --stroke-color: var(--color-scheme-4); }
+}
+
+/* Title accent borders */
+.section-title h3 {
+    border-left: 2px solid var(--stroke-color) !important;
+    padding-left: 1.5rem !important;
+    margin-left: 2rem !important;
+}
+
+/* Quote section specific styling */
+#quote .section-text {
+    border-left: 2px solid var(--stroke-color);
+    padding-left: 2rem;
+    margin-left: 2rem;
+}
+
+/* Remove contact title */
+#contact .section-title {
+    display: none !important;
+}
+
+/* Quote section styling */
+#quote .section-text {
+    font-size: 1.6rem;
+    line-height: 1.8;
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 2rem;
+    border-left: none !important;
+}
+
+.quote-author {
+    display: block;
+    margin-top: 1.5rem;
+    font-size: 1.2rem;
+    opacity: 0.8;
+}
+
+/* Remove all title borders */
+.section-title h3 {
+    border-left: none !important;
+    padding-left: 0 !important;
+}
+
+/* If using a data-theme="light" attribute on <body> */
+body[data-theme="light"] {
+    /* Ensure overall text is black */
+    --text-color: #000000; 
+    --text-color-bright: #000000;
+    
+    /* Stroke color for borders, etc. */
+    --stroke-color: #000000;
+    
+    /* Background for a light theme */
+    --page-background: #fefefe;
+    --section-background: rgba(255, 255, 255, 0.9);
+}
+
+/* Match contact email size to contact links */
+.contact-section .contact-links p {
+    font-size: 1.4rem !important;
+    font-family: var(--body-font) !important;
+    letter-spacing: 0.8px !important;
+    line-height: 1.5 !important;
+}
+
+/* Reset all section backgrounds to be identical */
+.products-section,
+.manifesto-section,
+.contact-section,
+.quote-section {
+    background: rgba(255,255,255,0.02) !important;
+    backdrop-filter: blur(8px) !important;
+    -webkit-backdrop-filter: blur(8px) !important;
+    border: 1px solid rgba(255,255,255,0.1) !important;
+    margin: 4rem 0 !important;
+    padding: 4rem 2rem !important;
+    position: relative !important;
+}
+
+/* Remove any section-specific overrides */
+#products3, #manifesto, #contact, #quote {
+    background: rgba(255,255,255,0.02) !important;
+}
+
+/* Fix product grids/carousels */
+.product-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    gap: 2rem;
+    width: 100%;
+    max-width: var(--content-max-width);
+    margin: 0 auto;
+}
+
+.product-card {
+    position: relative;
+    width: 100%;
+    cursor: pointer;
+    transition: transform 0.3s ease;
+}
+
+.carousel {
+    position: relative;
+    width: 100%;
+    padding-bottom: 100%; /* Square aspect ratio */
+    overflow: hidden;
+}
+
+.carousel-images {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    transition: transform 0.3s ease;
+}
+
+.carousel-images img {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%; 
+    height: 100%;
+    object-fit: contain;
+}
+
+/* Fix multi-image carousels */
+.multi-image .carousel-images {
+    display: flex;
+    flex-wrap: nowrap;
+}
+
+.multi-image .carousel-images img {
+    position: relative; /* Not absolute */
+    flex: 0 0 100%; /* Each image takes full carousel width */
+}
+
+/* Enhanced grain effect - finer but more visible */
+.products-section::after,
+.manifesto-section::after,
+.contact-section::after,
+.quote-section::after {
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+    opacity: 0.18;
+    background-size: 80px;
+    filter: contrast(170%) brightness(0.95);
+}
+
+/* Better light theme support - ensure all text is black */
+body[data-theme="light"] {
+    --text-color: #000000 !important; 
+    --text-color-bright: #000000 !important;
+    --text-color-dim: rgba(0, 0, 0, 0.7) !important;
+    --text-secondary: #333333 !important;
+    --stroke-color: #000000 !important;
+    --page-background: #f5f5f5 !important;
+    --section-background: rgba(255, 255, 255, 0.9) !important;
+}
+
+/* Force quote text to use theme color */
+#quote .section-text div {
+    color: var(--text-color-bright) !important;
+}
+
+/* More visible grain on light theme */
+body[data-theme="light"] .products-section::after,
+body[data-theme="light"] .manifesto-section::after,
+body[data-theme="light"] .contact-section::after,
+body[data-theme="light"] .quote-section::after {
+    filter: invert(1) contrast(150%) brightness(0.9);
+    opacity: 0.12;
+}
+
+/* Remove frames (borders) around section backgrounds */
+.products-section,
+.manifesto-section,
+.contact-section,
+.quote-section {
+    border: none !important; /* Remove the 1px border */
+}
+
+/* Also ensure no borders on specific ID selectors */
+#products3, #manifesto, #contact, #quote {
+    border: none !important;
+}
+
+/* Remove any leftover border styling */
+.section-content {
+    border: none !important;
+}

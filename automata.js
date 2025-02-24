@@ -1,5 +1,13 @@
 class CellularAutomata {
-    constructor() {
+    constructor(noiseLevel = 1) {
+        this.noiseLevel = Math.min(Math.max(noiseLevel, 0.1), 2);
+        
+        // Update noise variables with more aggressive scaling
+        document.documentElement.style.setProperty('--noise-base-frequency', 
+            (0.8 * this.noiseLevel).toFixed(2));
+        document.documentElement.style.setProperty('--noise-opacity', 
+            (0.9 * this.noiseLevel).toFixed(2));
+        
         // Color palettes with improved contrast - keeping only the most effective ones
         this.colorPalettes = [
             // Dark palettes with high contrast
@@ -140,7 +148,7 @@ class CellularAutomata {
         this.previousGen = []; // Store previous generation for mirror CA
         this.redPath = []; // Simplified path structure
         this.path = []; // Store complete path
-        this.cellSize = 6;
+        this.cellSize = 4;
         this.rows = Math.ceil(this.canvas.height / this.cellSize);
         this.columns = Math.ceil(this.canvas.width / this.cellSize);
         
@@ -188,6 +196,15 @@ class CellularAutomata {
         this.init();
         this.loadFontAndInit(); // Load font first, then create letter mask
         this.animate();
+
+        // Add to constructor
+        this.noiseIndicator = document.createElement('div');
+        this.noiseIndicator.style.position = 'fixed';
+        this.noiseIndicator.style.bottom = '20px';
+        this.noiseIndicator.style.right = '20px';
+        this.noiseIndicator.style.color = this.currentPalette.stroke;
+        this.noiseIndicator.style.zIndex = '10000';
+        document.body.appendChild(this.noiseIndicator);
     }
 
     setupSkipAnimation() {
@@ -384,9 +401,9 @@ class CellularAutomata {
         }
     }
 
-    drawDot(ctx, x, y, color, scale = 1) {
+    drawDot(ctx, x, y, color, sizeMultiplier = 1) {
         ctx.beginPath();
-        const radius = (this.cellSize / 3) * scale;
+        const radius = (this.cellSize / 2) * 0.6 * sizeMultiplier;
         const randomOffset = (Math.random() * 0.3 + 0.8);
         const finalRadius = radius * randomOffset;
         
@@ -601,6 +618,9 @@ class CellularAutomata {
             // Final state: draw blurred background with clear text
             this.drawFinalState();
         }
+
+        // Add to animate() method
+        this.noiseIndicator.textContent = `NOISE: ${this.noiseLevel.toFixed(1)}x`;
     }
 
     drawPath() {
@@ -750,4 +770,64 @@ window.addEventListener('resize', () => {
 });
 
 // Start
-new CellularAutomata(); 
+new CellularAutomata();
+
+// Example of dynamic control
+document.addEventListener('keydown', (e) => {
+    if(e.key === 'ArrowUp') {
+        const current = parseFloat(getComputedStyle(document.documentElement)
+            .getPropertyValue('--noise-base-frequency')) / 0.6;
+        new CellularAutomata(current + 0.1);
+    }
+    if(e.key === 'ArrowDown') {
+        const current = parseFloat(getComputedStyle(document.documentElement)
+            .getPropertyValue('--noise-base-frequency')) / 0.6;
+        new CellularAutomata(current - 0.1);
+    }
+});
+
+// Or find the DOMContentLoaded listener and remove any delay
+document.addEventListener('DOMContentLoaded', () => {
+    // Remove any setTimeout wrapper and start immediately
+    initCanvas();
+    startAutomata(); // Make sure this runs immediately
+});
+
+function drawDot(x, y, isHead = false) {
+    ctx.beginPath();
+    
+    if (isHead) {
+        // Make head dots 75% larger and slightly different color
+        ctx.arc(x, y, dotSize * 1.75, 0, Math.PI * 2);
+        
+        // Use a brighter/different shade for head
+        const headColor = getCurrentColor();
+        // Brighten the head color (shift toward white)
+        const brighterColor = shiftColorToward(headColor, '#FFFFFF', 0.3);
+        ctx.fillStyle = brighterColor;
+    } else {
+        ctx.arc(x, y, dotSize, 0, Math.PI * 2);
+        ctx.fillStyle = getCurrentColor();
+    }
+    
+    ctx.fill();
+}
+
+function shiftColorToward(hexColor, targetColor, amount) {
+    // Parse hex colors
+    let r1 = parseInt(hexColor.slice(1, 3), 16);
+    let g1 = parseInt(hexColor.slice(3, 5), 16);
+    let b1 = parseInt(hexColor.slice(5, 7), 16);
+    
+    let r2 = parseInt(targetColor.slice(1, 3), 16);
+    let g2 = parseInt(targetColor.slice(3, 5), 16);
+    let b2 = parseInt(targetColor.slice(5, 7), 16);
+    
+    // Calculate new color
+    let r = Math.round(r1 + (r2 - r1) * amount);
+    let g = Math.round(g1 + (g2 - g1) * amount);
+    let b = Math.round(b1 + (b2 - b1) * amount);
+    
+    // Convert back to hex
+    return `#${r.toString(16).padStart(2, '0')}${g.toString(16).padStart(2, '0')}${b.toString(16).padStart(2, '0')}`;
+} 

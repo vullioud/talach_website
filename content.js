@@ -101,7 +101,7 @@ const sectionContent = {
         }
     },
     manifesto: {
-        title: '<h3 style="font-family: var(--body-font)">TALACH ?</h3>',
+        title: '<h3>TALACH ?</h3>',
         text: `<p>• <em>Travail à la Chaine</em> — A set of rules, for once not to limit but to expand. Not a boundary, but a starting point.</p>
 
         <p>• This project lives in the spirit of amateurism, making for the love of making. <em>Amateur</em>, from the French <em>aimer</em>, to love.</p>
@@ -109,70 +109,67 @@ const sectionContent = {
         <p>• Simple algorithms shape the work. Sometimes self-contained, sometimes colliding with images, words, and worlds already spinning.</p>`
     },
     products1: {
-        title: '<h3 style="font-family: var(--body-font)">Drawings</h3>',
+        title: '<h3 style="font-family: var(--body-font)">Grids</h3>',
+        path: "products_1",
         items: [
-            {
-                images: ['products_bike/luxor-drawing-171350_492.svg'],
-                itemType: ''
-            },
-            {
-                images: ['products_bike/luxor-drawing-165814_894.svg'],
-                itemType: ''
-            },
-            {
-                images: ['products_bike/luxor-drawing-165601_523.svg'],
-                itemType: ''
-            },
-            {
-                images: ['products_bike/luxor-drawing-143254_316.png'],
-                itemType: ''
-            },
-            {
-                images: ['products_bike/luxor-drawing-222951_155.png'],
-                itemType: ''
-            },
-            {
-                images: ['products_bike/luxor-drawing-201133_914.png'],
-                itemType: ''
-            },
-            {
-                images: ['products_bike/luxor-drawing-195701_447.png'],
-                itemType: ''
-            },
-            {
-                images: ['products_bike/luxor-drawing-190859_328.png'],
-                itemType: ''
-            },
-            {
-                images: ['products_bike/luxor-drawing-190833_256.png'],
-                itemType: ''
-            },
-            {
-                images: ['products_bike/luxor-drawing-185822_774.png'],
-                itemType: ''
-            }
+            {images: ['products_1/luxor-drawing-143254_316.png'], itemType: ''},
+            {images: ['products_1/luxor-drawing-165601_523.svg'], itemType: ''},
+            {images: ['products_1/luxor-drawing-165814_894.svg'], itemType: ''},
+            {images: ['products_1/luxor-drawing-171350_492.svg'], itemType: ''},
+            {images: ['products_1/luxor-drawing-183841_632.png'], itemType: ''},
+            {images: ['products_1/luxor-drawing-185822_774.png'], itemType: ''},
+            {images: ['products_1/luxor-drawing-190833_256.png'], itemType: ''},
+            {images: ['products_1/luxor-drawing-190859_328.png'], itemType: ''},
+            {images: ['products_1/luxor-drawing-195701_447.png'], itemType: ''},
+            {images: ['products_1/luxor-drawing-201133_914.png'], itemType: ''},
+            {images: ['products_1/luxor-drawing-222951_155.png'], itemType: ''}
         ]
     },
     products2: {
-        title: '<h3 style="font-family: var(--body-font)">More Drawings</h3>',
+        title: '<h3 style="font-family: var(--body-font)">Unclassified</h3>',
         items: [
             {
-                images: ['products_life/product1_pic1.png', 'products_life/product1_pic2.png'],
+                images: ['products_2/product1_pic1.png', 'products_2/product1_pic2.png'],
+                itemType: 'carousel'
+            },
+            {
+                images: ['products_2/product2_pic1.png'],
                 itemType: ''
             },
             {
-                images: ['products_life/product2_pic1.png'],
+                images: ['products_2/product3_pic1.png'],
                 itemType: ''
             },
             {
-                images: ['products_life/product3_pic1.png'],
+                images: ['products_2/product4_pic1.png'],
                 itemType: ''
             },
             {
-                images: ['products_life/product4_pic1.png', 'products_life/product4_pic2.png'],
-                itemType: ''
-            }
+                images: ['products_2/product5_pic1.png', 'products_2/product5_pic2.png'],
+                itemType: 'carousel'
+            },
+            { images: ['products_2/Japanese_style_14_drawcell_size_based_on_dist_to_col.png'], itemType: '' },
+            { images: ['products_2/luxor-drawing-114446_852.png'], itemType: '' },
+            { images: ['products_2/luxor-drawing-120615_134.png'], itemType: '' },
+            { images: ['products_2/luxor-drawing-120952_969.png'], itemType: '' },
+            { images: ['products_2/luxor-drawing-121437_09.png'], itemType: '' },
+            { images: ['products_2/luxor-drawing-143041_521.png'], itemType: '' },
+            { images: ['products_2/luxor-drawing-162917_081.png'], itemType: '' },
+            { images: ['products_2/luxor-drawing-170346_696.png'], itemType: '' },
+            { images: ['products_2/luxor-drawing-215905_846.png'], itemType: '' },
         ]
+    },
+    products3: {
+        title: '<h3>Normal ?</h3>',
+        path: "products_3",
+        items: Array.from({length: 24}, (_, i) => {
+            let num = i + 1;
+            if(num >= 20) num += 1; // Skip nr20
+            return {
+                images: [`products_3/nr${num}.png`],
+                itemType: ''
+            };
+        })
     },
     contact: {
         email: 'talach@posteo.net',
@@ -208,34 +205,44 @@ function createProductCard(item) {
     `;
 }
 
-// Update section content
+// Update section content with titles, products, manifesto, and contact
 function updateSectionContent() {
-    // Update quote section
+    // Quote section with forced display
     const quoteSection = document.getElementById('quote');
     if (quoteSection) {
-        const quoteContent = quoteSection.querySelector('.quote-text');
-        if (quoteContent) {
-            quoteContent.innerHTML = sectionContent.quote.text;
+        const textEl = quoteSection.querySelector('.section-text');
+        if (textEl) {
+            // Force visible styling and direct quote assignment
+            textEl.style.display = "block";
+            textEl.style.visibility = "visible";
+            textEl.style.textAlign = "center";
+            textEl.style.padding = "3rem";
+            
+            // Get a random quote and insert directly
+            const randomIndex = Math.floor(Math.random() * quotes.length);
+            const quote = quotes[randomIndex];
+            textEl.innerHTML = `
+                <div style="font-size:1.8rem;line-height:1.5;margin-bottom:1rem;color:var(--text-color-bright);">
+                    ${quote.text}
+                </div>
+                <div style="font-size:1.2rem;opacity:0.8;margin-top:1rem;">
+                    — ${quote.author}
+                </div>
+            `;
         }
     }
 
-    // Update manifesto section
+    // 1) Restore the Manifesto text
     const manifestoSection = document.getElementById('manifesto');
     if (manifestoSection) {
         const titleEl = manifestoSection.querySelector('.section-title');
         const textEl = manifestoSection.querySelector('.section-text');
-        
-        if (titleEl) {
-            titleEl.innerHTML = `<h3>${sectionContent.manifesto.title}</h3>`;
-        }
-        
-        if (textEl) {
-            textEl.innerHTML = sectionContent.manifesto.text;
-        }
+        if (titleEl) titleEl.innerHTML = sectionContent.manifesto.title;
+        if (textEl) textEl.innerHTML = sectionContent.manifesto.text;
     }
 
-    // Update products sections
-    ['products1', 'products2'].forEach(section => {
+    // 2) Restore the products1, products2, products3 sections
+    ['products1', 'products2', 'products3'].forEach(section => {
         const sectionEl = document.getElementById(section);
         if (!sectionEl) return;
 
@@ -253,25 +260,33 @@ function updateSectionContent() {
         }
     });
 
-    // Update contact section
+    initializeCarousels();
+
+    // Contact section (just add email text, no title)
     const contactSection = document.getElementById('contact');
     if (contactSection) {
         const titleEl = contactSection.querySelector('.section-title');
-        const linksContainer = contactSection.querySelector('.contact-links');
-        
         if (titleEl) {
-            titleEl.innerHTML = `<h3>${sectionContent.contact.email}</h3>`;
+            // Remove any heading for the contact section:
+            titleEl.remove();
         }
-        
+        const linksContainer = contactSection.querySelector('.contact-links');
         if (linksContainer) {
-            linksContainer.innerHTML = sectionContent.contact.links
-                .map(link => `<a href="${link.url}" target="_blank" rel="noopener noreferrer">${link.text}</a>`)
+            // Insert the email above the existing links, as plain text
+            linksContainer.insertAdjacentHTML(
+                'afterbegin',
+                `<p style="margin-bottom: 1rem;">talach@posteo.net</p>`
+            );
+            
+            // Then restore the contact links:
+            linksContainer.innerHTML += sectionContent.contact.links
+                .map(link => `<a href="${link.url}" target="_blank">${link.text}</a>`)
                 .join('');
         }
     }
 }
 
-// Initialize carousel functionality
+// Unified carousel initialization
 function initializeCarousels() {
     document.querySelectorAll('.carousel.multi-image').forEach(carousel => {
         const images = carousel.querySelector('.carousel-images');
@@ -280,24 +295,15 @@ function initializeCarousels() {
         const totalImages = images.querySelectorAll('img').length;
         let currentIndex = 0;
 
-        // Disable prev button initially
-        if (prevBtn) {
-            prevBtn.style.opacity = '0.5';
-            prevBtn.style.pointerEvents = 'none';
-        }
-
         function updateCarousel() {
             images.style.transform = `translateX(-${currentIndex * 100}%)`;
+            images.querySelectorAll('img').forEach(img => {
+                img.style.opacity = '1'; // Force all images visible
+            });
             
-            if (prevBtn) {
-                prevBtn.style.opacity = currentIndex === 0 ? '0.5' : '1';
-                prevBtn.style.pointerEvents = currentIndex === 0 ? 'none' : 'auto';
-            }
-            
-            if (nextBtn) {
-                nextBtn.style.opacity = currentIndex === totalImages - 1 ? '0.5' : '1';
-                nextBtn.style.pointerEvents = currentIndex === totalImages - 1 ? 'none' : 'auto';
-            }
+            // Update button states
+            if (prevBtn) prevBtn.style.display = currentIndex === 0 ? 'none' : 'block';
+            if (nextBtn) nextBtn.style.display = currentIndex === totalImages - 1 ? 'none' : 'block';
         }
 
         if (prevBtn) {
@@ -402,10 +408,76 @@ function initializeProductModal() {
     });
 }
 
+// Add this function at the beginning of content.js
+function setupDynamicTextColors() {
+    // Function to determine if a color is light or dark
+    function isLightColor(r, g, b) {
+        // Calculate relative luminance
+        // Using the formula: 0.299*R + 0.587*G + 0.114*B
+        const luminance = (0.299 * r + 0.587 * g + 0.114 * b) / 255;
+        return luminance > 0.5; // If luminance > 0.5, it's a light color
+    }
+    
+    // Function to observe the automata canvas and adjust text color
+    function observeCanvasColor() {
+        const canvas = document.getElementById('background');
+        if (!canvas) return;
+        
+        const ctx = canvas.getContext('2d');
+        if (!ctx) return;
+        
+        // Sample points from the canvas (center and corners)
+        const samplePoints = [
+            [canvas.width/2, canvas.height/2],          // center
+            [canvas.width/4, canvas.height/4],          // top-left
+            [canvas.width*3/4, canvas.height/4],        // top-right
+            [canvas.width/4, canvas.height*3/4],        // bottom-left
+            [canvas.width*3/4, canvas.height*3/4]       // bottom-right
+        ];
+        
+        // Calculate average color from samples
+        let totalR = 0, totalG = 0, totalB = 0;
+        
+        samplePoints.forEach(([x, y]) => {
+            try {
+                const pixel = ctx.getImageData(x, y, 1, 1).data;
+                totalR += pixel[0];
+                totalG += pixel[1];
+                totalB += pixel[2];
+            } catch(e) {
+                console.warn('Canvas sampling error:', e);
+            }
+        });
+        
+        const avgR = totalR / samplePoints.length;
+        const avgG = totalG / samplePoints.length;
+        const avgB = totalB / samplePoints.length;
+        
+        // Set the data-theme attribute based on luminance
+        if (isLightColor(avgR, avgG, avgB)) {
+            document.body.setAttribute('data-theme', 'light');
+            document.documentElement.style.setProperty('--text-color', 'rgba(40, 40, 40, 0.9)');
+            document.documentElement.style.setProperty('--text-color-bright', 'rgba(10, 10, 10, 0.95)');
+        } else {
+            document.body.setAttribute('data-theme', 'dark');
+            document.documentElement.style.setProperty('--text-color', 'rgba(240, 240, 240, 0.85)');
+            document.documentElement.style.setProperty('--text-color-bright', 'rgba(255, 255, 255, 0.95)');
+        }
+    }
+    
+    // Run color observation on animation frames
+    function checkAndUpdateColors() {
+        observeCanvasColor();
+        requestAnimationFrame(checkAndUpdateColors);
+    }
+    
+    // Start the observation
+    checkAndUpdateColors();
+}
+
 // Initialize content when page loads
 document.addEventListener('DOMContentLoaded', () => {
     updateSectionContent();
-    initializeCarousels();
     initializeProductModal();
     
     // Hide content initially
@@ -413,22 +485,22 @@ document.addEventListener('DOMContentLoaded', () => {
     content.style.opacity = '0';
     content.style.visibility = 'hidden';
     
-    // Show content after animation (3 seconds)
-    setTimeout(() => {
-        content.style.opacity = '1';
-        content.style.visibility = 'visible';
-        document.body.style.overflow = 'auto';
-        document.body.style.height = 'auto';
-        
-        const canvas = document.getElementById('background');
-        canvas.style.zIndex = '2';
-        
-        window.scrollTo({
-            top: 0,
-            behavior: 'auto'
-        });
-    }, 3000);
-});
+    // Show content immediately
+    content.style.opacity = '1';
+    content.style.visibility = 'visible';
+    document.body.style.overflow = 'auto';
+    document.body.style.height = 'auto';
+    
+    const canvas = document.getElementById('background');
+    canvas.style.zIndex = '2';
+    
+    window.scrollTo({
+        top: 0,
+        behavior: 'auto'
+    });
+    
+    setupDynamicTextColors();
+}, 0);
 
 // Menu button functionality
 document.querySelector('.menu-button').addEventListener('click', function() {
